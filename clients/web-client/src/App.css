@@ -1,0 +1,385 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Auth Page */
+.auth-page {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.auth-container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.auth-container h1 {
+  color: #667eea;
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  background: #fee;
+  color: #c33;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* Lobby Page */
+.lobby-page {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.lobby-header {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.lobby-header h2 {
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.lobby-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background: #e74c3c;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
+}
+
+.lobby-content {
+  display: grid;
+  gap: 20px;
+}
+
+.create-room-section,
+.rooms-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.create-room-section h3,
+.rooms-section h3 {
+  color: #667eea;
+  margin-bottom: 15px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.refresh-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  background: #3498db;
+}
+
+.refresh-btn:hover {
+  background: #2980b9;
+}
+
+.no-rooms {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+.rooms-list {
+  display: grid;
+  gap: 10px;
+}
+
+.room-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid #eee;
+}
+
+.room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.room-id {
+  font-weight: 600;
+  color: #333;
+}
+
+.room-players {
+  font-size: 14px;
+  color: #666;
+}
+
+.room-card button {
+  padding: 8px 20px;
+  width: auto;
+}
+
+/* Game Page */
+.game-page {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.waiting-container,
+.game-over-container {
+  background: white;
+  padding: 60px 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.waiting-container h2,
+.game-over-container h1 {
+  color: #667eea;
+  margin-bottom: 20px;
+}
+
+.waiting-container p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.game-container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.game-header h2 {
+  color: #667eea;
+}
+
+.player-info span {
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.player-info span.active {
+  background: #667eea;
+  color: white;
+}
+
+.stones-display {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.stones-display h3 {
+  color: #667eea;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.stones-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.stone {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.turn-indicator {
+  text-align: center;
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.my-turn {
+  background: #d4edda;
+  color: #155724;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.opponent-turn {
+  background: #fff3cd;
+  color: #856404;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.move-controls {
+  display: flex;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.move-controls button {
+  font-size: 18px;
+  padding: 15px;
+}
+
+.move-history {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.move-history h4 {
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
+.move-history ul {
+  list-style: none;
+}
+
+.move-history li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  color: #555;
+}
+
+.move-history li:last-child {
+  border-bottom: none;
+}
+
+.leave-btn {
+  width: 100%;
+  background: #e74c3c;
+  margin-top: 20px;
+}
+
+.leave-btn:hover {
+  background: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lobby-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .game-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stones-grid .stone {
+    width: 30px;
+    height: 30px;
+  }
+}
