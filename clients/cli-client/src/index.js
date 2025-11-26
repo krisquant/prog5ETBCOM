@@ -222,7 +222,6 @@ Game Rules:
     
     this.socket.on('connect', () => {
       console.log('\n✓ Connected to game server');
-      
       this.socket.emit('connect_room', {
         roomId: this.roomId,
         userId: this.userId,
@@ -351,7 +350,6 @@ Game Rules:
       console.log(`Invalid move! Only ${this.stonesRemaining} stones remaining.`);
       return this.promptMove();
     }
-    
     this.socket.emit('make_move', {
       gameId: this.gameId,
       userId: this.userId,
@@ -379,10 +377,8 @@ Game Rules:
     });
   }
 }
-
 const client = new GameClient();
 client.start().catch(console.error);
-
 process.on('SIGINT', () => {
   console.log('\n\nGoodbye!');
   process.exit(0);

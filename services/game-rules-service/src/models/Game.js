@@ -1,50 +1,92 @@
-class Game {
-  constructor(player1Id, player2Id) {
-    this.gameId = require('crypto').randomUUID();
-    this.player1Id = player1Id;
-    this.player2Id = player2Id;
-    this.currentPlayerId = player1Id;
-    this.stonesRemaining = 21;
-    this.moves = [];
-    this.status = 'active';
-    this.winnerId = null;
-    this.loserId = null;
-    this.createdAt = new Date();
+
+const games = new Map();
+
+class GameModel {
+  static create(roomId, player1Id, player2Id) {
+    const game = {
+      id: require('crypto').randomUUID(),
+      roomId,
+      player1Id,
+      player2Id,
+      currentPlayerId: player1Id, 
+      stonesRemaining: 21,
+      status: 'in_progress', // 'in_progress', 'finished'
+      moves: [],
+      winnerId: null,
+      loserId: null,
+      createdAt: new Date().toISOString(),
+      finishedAt: null
+    };
+    
+    games.set(game.id, game);
+    return game;
   }
 
-  makeMove(playerId, stonesToTake) {
-    if (this.status !== 'active') {
-      throw new Error('Game is not active');
+  static findById(gameId) {
+    return games.get(gameId);
+  }
+
+  static findByRoomId(roomId) {
+    return Array.from(games.values()).find(game => game.roomId === roomId);
+  }
+
+  static makeMove(gameId, playerId, stonesToTake) {
+    const game = games.get(gameId);
+    
+    if (!game) {
+      return { success: false, error: 'Game not found' };
     }
 
-    if (playerId !== this.currentPlayerId) {
-      throw new Error('Not your turn');
+  
+    if (game.currentPlayerId !== playerId) {
+      return { success: false, error: 'Not your turn' };
     }
 
+    // Validate  status
+    if (game.status !== 'in_progress') {
+      return { success: false, error: 'Game is not in progress' };
+    }
+
+    // Validate move
     if (![1, 2, 3].includes(stonesToTake)) {
-      throw new Error('Can only take 1, 2, or 3 stones');
+      return { success: false, error: 'You can only take 1, 2, or 3 stones' };
     }
 
-    if (stonesToTake > this.stonesRemaining) {
-      throw new Error('Not enough stones remaining');
+    if (stonesToTake > game.stonesRemaining) {
+      return { success: false, error: `Only ${game.stonesRemaining} stones remaining` };
     }
 
-    this.stonesRemaining -= stonesToTake;
-    this.moves.push({
+  
+    game.stonesRemaining -= stonesToTake;
+    game.moves.push({
       playerId,
       stonesToTake,
-      stonesRemaining: this.stonesRemaining,
-      timestamp: new Date()
+      stonesRemainingAfter: game.stonesRemaining,
+      timestamp: new Date().toISOString()
     });
 
-    if (this.stonesRemaining === 0) {
-      this.status = 'finished';
-      this.loserId = playerId;
-      this.winnerId = playerId === this.player1Id ? this.player2Id : this.player1Id;
+  
+    if (game.stonesRemaining === 0) {
+    
+      game.status = 'finished';
+      game.loserId = playerId;
+      game.winnerId = playerId === game.player1Id ? game.player2Id : game.player1Id;
+      game.finishedAt = new Date().toISOString();
     } else {
-      this.currentPlayerId = playerId === this.player1Id ? this.player2Id : this.player1Id;
+    
+      game.currentPlayerId = playerId === game.player1Id ? game.player2Id : game.player1Id;
     }
+
+    return { success: true, game };
+  }
+
+  static getAll() {
+    return Array.from(games.values());
+  }
+
+  static delete(gameId) {
+    return games.delete(gameId);
   }
 }
 
-module.exports = Game;
+module.exports = GameModel;

@@ -1,69 +1,77 @@
 import { useState } from 'react';
-import { api } from '../services/api';
+import api from '../services/api';
 
 export default function AuthPage({ onLogin }) {
+  const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const user = await api.register(username);
-      console.log('Registered:', user);
-      onLogin(user);
-    } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+      let userData;
+      if (isLogin) {
+        userData = await api.login(username);
+      } else {
+        userData = await api.register(username);
+        userData = await api.login(username);
+      }
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const user = await api.login(username);
-      console.log('Logged in:', user);
-      onLogin(user);
+      onLogin(userData);
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.error || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1>21 Stones Game</h1>
-        <p className="subtitle">Take turns removing stones. Don't take the last one!</p>
+    <div className="auth-container">
+      <h1>21 Stones</h1>
+      <p className="subtitle">Strategic Two-Player Game</p>
 
-        <div className="auth-form">
+      <form onSubmit={handleSubmit} className="auth-form">
+        <div className="input-group">
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            placeholder="Enter username"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            disabled={loading}
+            placeholder="Enter your username"
+            required
+            minLength={3}
+            maxLength={20}
           />
-
-          {error && <div className="error">{error}</div>}
-
-          <div className="button-group">
-            <button onClick={handleLogin} disabled={loading || !username}>
-              Login
-            </button>
-            <button onClick={handleRegister} disabled={loading || !username}>
-              Register
-            </button>
-          </div>
         </div>
+
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Register')}
+        </button>
+
+        {error && <div className="error-message">{error}</div>}
+      </form>
+
+      <div className="auth-toggle">
+        {isLogin ? "Don't have an account?" : "Already have an account?"}
+        {' '}
+        <button onClick={() => {
+          setIsLogin(!isLogin);
+          setError('');
+        }}>
+          {isLogin ? 'Register' : 'Login'}
+        </button>
+      </div>
+
+      <div style={{ marginTop: '40px', color: '#666', fontSize: '14px' }}>
+        <p><strong>Game Rules:</strong></p>
+        <p>• Start with 21 stones</p>
+        <p>• Take 1, 2, or 3 stones per turn</p>
+        <p>• Player who takes the LAST stone LOSES!</p>
       </div>
     </div>
   );
