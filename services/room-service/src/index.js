@@ -21,41 +21,37 @@ app.use(express.json());
 
 
 app.use((req, res, next) => {
-  console.log(`[ROOM-SERVICE] ${req.method} ${req.path}`);
+  if (req.path !== '/health') {
+    console.log(`${req.method} ${req.path}`);
+  }
   next();
 });
 
-
 app.use('/api/rooms', roomRoutes);
-
 
 app.get('/health', (req, res) => {
   res.json({ 
     service: 'room-service', 
-    status: 'running',
-    websocket: 'enabled',
-    timestamp: new Date().toISOString()
+    status: 'ok'
   });
 });
 
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({ error: 'Not found' });
 });
+
 app.use((err, req, res, next) => {
-  console.error('[ROOM-SERVICE] Error:', err);
-  res.status(500).json({ error: 'Internal server error' });
+  console.error('Error:', err.message);
+  res.status(500).json({ error: 'Something went wrong' });
 });
+
+
 const wsHandler = new WebSocketHandler(io);
 wsHandler.initialize();
+console.log('WebSocket handler initialized');
+
 server.listen(PORT, () => {
-  console.log(`
-╔══════════════════════════════════════════════════════════╗
-║        ROOM SERVICE - 21 STONES GAME                     ║
-╚══════════════════════════════════════════════════════════╝
+  console.log(`Room Service running on port ${PORT}`);
+  console.log('WebSocket ready at ws://localhost:' + PORT);
   
-  Service running on: http://localhost:${PORT}
-  WebSocket: ws://localhost:${PORT}
-  Health check: http://localhost:${PORT}/health
-  Status: Ready to accept connections
-  `);
 });

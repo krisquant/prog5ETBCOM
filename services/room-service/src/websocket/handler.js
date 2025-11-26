@@ -17,19 +17,15 @@ class WebSocketHandler {
       socket.on('connect_room', async (data) => {
         try {
           const { roomId, userId, token } = data;
-          
+          console.log('Connect room attempt:', roomId, userId);
           console.log(`[WEBSOCKET] User ${userId} connecting to room ${roomId}`);
           const userResponse = await axios.get(`${USER_SERVICE_URL}/api/users/${userId}`);
           const user = userResponse.data;
           const room = RoomModel.findById(roomId);
           if (!room) {
-            socket.emit('error', {
-              type: 'error',
-              payload: {
-                code: 'ROOM_NOT_FOUND',
-                message: 'Room not found'
-              }
-            });
+            socket.emit('error', { 
+               payload: { message: 'Room not found' } 
+              });
             return;
           }
           socket.join(roomId);
