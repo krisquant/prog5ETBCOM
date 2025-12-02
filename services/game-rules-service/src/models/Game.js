@@ -10,7 +10,7 @@ class GameModel {
       player2Id,
       currentPlayerId: player1Id, 
       stonesRemaining: 21,
-      status: 'in_progress', // 'in_progress', 'finished'
+      status: 'in_progress', 
       moves: [],
       winnerId: null,
       loserId: null,
